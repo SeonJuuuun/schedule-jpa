@@ -1,4 +1,4 @@
-package com.schedule.jpa.controller.config;
+package com.schedule.jpa.config;
 
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
