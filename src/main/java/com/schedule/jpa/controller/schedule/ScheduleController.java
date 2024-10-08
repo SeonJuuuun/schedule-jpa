@@ -32,13 +32,13 @@ public class ScheduleController {
 
     @GetMapping("/{scheduleId}")
     public ResponseEntity<ScheduleReadResponse> readSchedule(@PathVariable final Long scheduleId) {
-        final ScheduleReadResponse response = scheduleService.findById(scheduleId);
+        final ScheduleReadResponse response = scheduleService.findSchedule(scheduleId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/schedules")
     public ResponseEntity<List<ScheduleReadResponse>> readSchedules() {
-        final List<ScheduleReadResponse> responses = scheduleService.findAll();
+        final List<ScheduleReadResponse> responses = scheduleService.findSchedules();
         return ResponseEntity.status(HttpStatus.OK).body(responses);
     }
 

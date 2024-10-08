@@ -24,12 +24,12 @@ public class ScheduleService {
         return ScheduleSaveResponse.from(savedSchedule);
     }
 
-    public ScheduleReadResponse findById(final Long scheduleId) {
+    public ScheduleReadResponse findSchedule(final Long scheduleId) {
         final Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow();
         return ScheduleReadResponse.from(schedule);
     }
 
-    public List<ScheduleReadResponse> findAll() {
+    public List<ScheduleReadResponse> findSchedules() {
         final List<Schedule> schedules = scheduleRepository.findAll();
         return ScheduleReadResponse.from(schedules);
     }
