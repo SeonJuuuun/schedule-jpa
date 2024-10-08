@@ -1,10 +1,10 @@
-package com.schedule.jpa.controller;
+package com.schedule.jpa.controller.schedule;
 
-import com.schedule.jpa.controller.dto.ScheduleReadResponse;
-import com.schedule.jpa.controller.dto.ScheduleSaveRequest;
-import com.schedule.jpa.controller.dto.ScheduleSaveResponse;
-import com.schedule.jpa.controller.dto.ScheduleUpdateRequest;
-import com.schedule.jpa.controller.dto.ScheduleUpdateResponse;
+import com.schedule.jpa.controller.schedule.dto.ScheduleReadResponse;
+import com.schedule.jpa.controller.schedule.dto.ScheduleSaveRequest;
+import com.schedule.jpa.controller.schedule.dto.ScheduleSaveResponse;
+import com.schedule.jpa.controller.schedule.dto.ScheduleUpdateRequest;
+import com.schedule.jpa.controller.schedule.dto.ScheduleUpdateResponse;
 import com.schedule.jpa.service.ScheduleService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

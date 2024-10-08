@@ -1,4 +1,4 @@
-package com.schedule.jpa.controller.dto;
+package com.schedule.jpa.controller.schedule.dto;
 
 import com.schedule.jpa.domain.schedule.Schedule;
 import java.time.LocalDateTime;

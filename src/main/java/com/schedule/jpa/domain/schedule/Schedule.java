@@ -1,10 +1,15 @@
 package com.schedule.jpa.domain.schedule;
 
 import com.schedule.jpa.domain.BaseEntity;
+import com.schedule.jpa.domain.comment.Comment;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +29,9 @@ public class Schedule extends BaseEntity {
 
     private String content;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
     public Schedule(final String username, final String title, final String content) {
         this.username = username;
         this.title = title;
@@ -37,5 +45,9 @@ public class Schedule extends BaseEntity {
     public void update(final String title, final String content) {
         this.title = title;
         this.content = content;
+    }
+
+    public void addComment(final Comment comment) {
+        comments.add(comment);
     }
 }
