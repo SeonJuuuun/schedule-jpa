@@ -3,10 +3,14 @@ package com.schedule.jpa.service;
 import com.schedule.jpa.controller.dto.ScheduleReadResponse;
 import com.schedule.jpa.controller.dto.ScheduleSaveRequest;
 import com.schedule.jpa.controller.dto.ScheduleSaveResponse;
+import com.schedule.jpa.controller.dto.ScheduleUpdateRequest;
+import com.schedule.jpa.controller.dto.ScheduleUpdateResponse;
 import com.schedule.jpa.domain.schedule.Schedule;
 import com.schedule.jpa.domain.schedule.ScheduleRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,5 +27,17 @@ public class ScheduleService {
     public ScheduleReadResponse findById(final Long scheduleId) {
         final Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow();
         return ScheduleReadResponse.from(schedule);
+    }
+
+    public List<ScheduleReadResponse> findAll() {
+        final List<Schedule> schedules = scheduleRepository.findAll();
+        return ScheduleReadResponse.from(schedules);
+    }
+
+    @Transactional
+    public ScheduleUpdateResponse update(final ScheduleUpdateRequest request, final Long scheduleId) {
+        final Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow();
+        schedule.update(request.title(), request.title());
+        return ScheduleUpdateResponse.from(schedule);
     }
 }
