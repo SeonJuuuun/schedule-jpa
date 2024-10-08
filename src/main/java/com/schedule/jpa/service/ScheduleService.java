@@ -40,4 +40,8 @@ public class ScheduleService {
         schedule.update(request.title(), request.title());
         return ScheduleUpdateResponse.from(schedule);
     }
+
+    public void delete(final Long scheduleId) {
+        scheduleRepository.deleteById(scheduleId);
+    }
 }
