@@ -8,6 +8,7 @@ import com.schedule.jpa.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -37,5 +38,14 @@ public class CommentController {
     ) {
         final CommentUpdateResponse response = commentService.update(request, scheduleId, commentId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @DeleteMapping("/{scheduleId}/{commentId}")
+    public ResponseEntity<Void> deleteComment(
+            @PathVariable final Long scheduleId,
+            @PathVariable final Long commentId
+    ) {
+        commentService.delete(scheduleId, commentId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

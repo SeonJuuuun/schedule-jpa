@@ -51,4 +51,18 @@ public class CommentService {
         comment.update(request.content());
         return CommentUpdateResponse.from(comment);
     }
+
+    public void delete(final Long scheduleId, final Long commentId) {
+        final Schedule schedule = scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new ScheduleApplicationException(SCHEDULE_NOT_FOUND));
+        final Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new ScheduleApplicationException(COMMENT_NOT_FOUND));
+
+        if (!schedule.isContainsComment(comment)) {
+            throw new ScheduleApplicationException(COMMENT_NOT_FOUND_IN_SCHEDULE);
+        }
+
+        schedule.deleteComment(comment);
+        commentRepository.deleteById(commentId);
+    }
 }

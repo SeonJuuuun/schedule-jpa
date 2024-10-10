@@ -29,7 +29,7 @@ public class Schedule extends BaseEntity {
 
     private String content;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
     public Schedule(final String username, final String title, final String content) {
@@ -53,5 +53,9 @@ public class Schedule extends BaseEntity {
 
     public boolean isContainsComment(final Comment comment) {
         return comments.contains(comment);
+    }
+
+    public void deleteComment(Comment comment) {
+        comments.remove(comment);
     }
 }
