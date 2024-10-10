@@ -5,6 +5,7 @@ import com.schedule.jpa.controller.schedule.dto.ScheduleSaveRequest;
 import com.schedule.jpa.controller.schedule.dto.ScheduleSaveResponse;
 import com.schedule.jpa.controller.schedule.dto.ScheduleUpdateRequest;
 import com.schedule.jpa.controller.schedule.dto.ScheduleUpdateResponse;
+import com.schedule.jpa.controller.schedule.dto.ScheduleResponse;
 import com.schedule.jpa.service.ScheduleService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -37,8 +38,8 @@ public class ScheduleController {
     }
 
     @GetMapping("/schedules")
-    public ResponseEntity<List<ScheduleReadResponse>> readSchedules() {
-        final List<ScheduleReadResponse> responses = scheduleService.findSchedules();
+    public ResponseEntity<List<ScheduleResponse>> readSchedules() {
+        final List<ScheduleResponse> responses = scheduleService.findSchedules();
         return ResponseEntity.status(HttpStatus.OK).body(responses);
     }
 
