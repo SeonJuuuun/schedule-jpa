@@ -50,4 +50,8 @@ public class Schedule extends BaseEntity {
     public void addComment(final Comment comment) {
         comments.add(comment);
     }
+
+    public boolean isContainsComment(final Comment comment) {
+        return comments.contains(comment);
+    }
 }
