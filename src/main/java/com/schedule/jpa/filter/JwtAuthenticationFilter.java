@@ -1,5 +1,6 @@
-package com.schedule.jpa.common;
+package com.schedule.jpa.filter;
 
+import static com.schedule.jpa.controller.exception.ErrorCodes.*;
 import static com.schedule.jpa.controller.exception.ErrorCodes.TOKEN_NULL_EXCEPTION;
 
 import com.schedule.jpa.controller.exception.ErrorCodes;
@@ -41,7 +42,7 @@ public class JwtAuthenticationFilter implements Filter {
         }
 
         if (jwtProvider.isTokenExpired(authorizationHeader)) {
-            throw new ScheduleApplicationException(ErrorCodes.TOKEN_EXPIRED);
+            throw new ScheduleApplicationException(TOKEN_EXPIRED);
         }
 
         chain.doFilter(request, response);
