@@ -51,7 +51,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = { ScheduleApplicationException.class })
-    public ResponseEntity<ApiErrorResponse> beApplicationExceptionHandler(ScheduleApplicationException ex) {
+    public ResponseEntity<ApiErrorResponse> scheduleApplicationException(ScheduleApplicationException ex) {
         log.error("Error occurs {}", ex.toString());
 
         final ApiErrorResponse body = ApiErrorResponse.from(ex.getErrorCodes());

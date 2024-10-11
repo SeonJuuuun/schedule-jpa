@@ -7,10 +7,12 @@ import jakarta.persistence.PreUpdate;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
+@EnableJpaAuditing
 public abstract class BaseEntity {
 
     @Column(updatable = false, nullable = false)

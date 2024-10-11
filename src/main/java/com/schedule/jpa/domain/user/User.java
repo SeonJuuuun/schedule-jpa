@@ -1,5 +1,6 @@
 package com.schedule.jpa.domain.user;
 
+import com.schedule.jpa.config.PasswordEncoder;
 import com.schedule.jpa.domain.BaseEntity;
 import com.schedule.jpa.domain.comment.Comment;
 import com.schedule.jpa.domain.schedule.Schedule;
@@ -54,5 +55,9 @@ public class User extends BaseEntity {
 
     public void addWriteSchedules(final Schedule schedule) {
         writeSchedules.add(schedule);
+    }
+
+    public boolean isValidPassword(final String password, final PasswordEncoder passwordEncoder) {
+        return passwordEncoder.matches(password, this.password);
     }
 }

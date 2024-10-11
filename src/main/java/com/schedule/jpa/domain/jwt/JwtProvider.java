@@ -20,32 +20,25 @@ public class JwtProvider {
         this.secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     }
 
-    public Jwt createToken(final Long id) {
+    public String createToken(final Long id) {
         final Date now = new Date();
         final Claims claims = Jwts.claims().setSubject(String.valueOf(id));
-        return new Jwt(Jwts.builder()
+        return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + (30 * 60 * 1000L)))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
-                .compact());
+                .compact();
     }
 
-    public Long getPayload(final String token) {
-        String sub = getClaims(token)
-                .getBody()
-                .get("sub", String.class);
-        return Long.parseLong(sub);
+    public Claims parseToken(String token) {
+        return Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .getBody();
     }
 
-    public Jws<Claims> getClaims(final String token) {
-        try {
-            return Jwts.parserBuilder()
-                    .setSigningKey(secretKey)
-                    .build()
-                    .parseClaimsJws(token);
-        } catch (Exception e) {
-            throw new IllegalArgumentException(e);
-        }
+    public boolean isTokenExpired(String token) {
+        return parseToken(token).getExpiration().before(new Date());
     }
 }
