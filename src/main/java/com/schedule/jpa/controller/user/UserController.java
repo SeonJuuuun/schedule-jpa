@@ -4,6 +4,7 @@ import com.schedule.jpa.controller.user.dto.UserReadResponse;
 import com.schedule.jpa.controller.user.dto.UserSaveRequest;
 import com.schedule.jpa.controller.user.dto.UserSaveResponse;
 import com.schedule.jpa.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserSaveResponse> createUser(@RequestBody final UserSaveRequest request) {
+    public ResponseEntity<UserSaveResponse> createUser(@RequestBody @Valid final UserSaveRequest request) {
         final UserSaveResponse response = userService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

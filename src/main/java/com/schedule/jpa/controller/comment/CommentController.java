@@ -5,6 +5,7 @@ import com.schedule.jpa.controller.comment.dto.CommentSaveResponse;
 import com.schedule.jpa.controller.comment.dto.CommentUpdateRequest;
 import com.schedule.jpa.controller.comment.dto.CommentUpdateResponse;
 import com.schedule.jpa.service.CommentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class CommentController {
     @PostMapping("/{scheduleId}/comment")
     public ResponseEntity<CommentSaveResponse> createComment(
             @PathVariable final Long scheduleId,
-            @RequestBody final CommentSaveRequest request
+            @RequestBody @Valid final CommentSaveRequest request
     ) {
         final CommentSaveResponse response = commentService.create(scheduleId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -32,7 +33,7 @@ public class CommentController {
 
     @PutMapping("/{scheduleId}/{commentId}")
     public ResponseEntity<CommentUpdateResponse> updateComment(
-            @RequestBody final CommentUpdateRequest request,
+            @RequestBody @Valid final CommentUpdateRequest request,
             @PathVariable final Long scheduleId,
             @PathVariable final Long commentId
     ) {
