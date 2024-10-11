@@ -1,14 +1,16 @@
 package com.schedule.jpa.controller.schedule;
 
+import com.schedule.jpa.controller.schedule.dto.SchedulePageResponse;
 import com.schedule.jpa.controller.schedule.dto.ScheduleReadResponse;
+import com.schedule.jpa.controller.schedule.dto.ScheduleResponse;
 import com.schedule.jpa.controller.schedule.dto.ScheduleSaveRequest;
 import com.schedule.jpa.controller.schedule.dto.ScheduleSaveResponse;
 import com.schedule.jpa.controller.schedule.dto.ScheduleUpdateRequest;
 import com.schedule.jpa.controller.schedule.dto.ScheduleUpdateResponse;
-import com.schedule.jpa.controller.schedule.dto.ScheduleResponse;
 import com.schedule.jpa.service.ScheduleService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -41,6 +44,15 @@ public class ScheduleController {
     public ResponseEntity<List<ScheduleResponse>> readSchedules() {
         final List<ScheduleResponse> responses = scheduleService.findSchedules();
         return ResponseEntity.status(HttpStatus.OK).body(responses);
+    }
+
+    @GetMapping("/schedules/page")
+    public ResponseEntity<List<SchedulePageResponse>> readSchedulesPage(
+            @RequestParam(defaultValue = "0", value = "page") int page,
+            @RequestParam(defaultValue = "10", value = "size") int size
+    ) {
+        final Page<SchedulePageResponse> schedules = scheduleService.findSchedulesPage(page, size);
+        return ResponseEntity.status(HttpStatus.OK).body(schedules.getContent());
     }
 
     @PutMapping("/{scheduleId}")
