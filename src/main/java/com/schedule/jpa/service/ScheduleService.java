@@ -42,7 +42,7 @@ public class ScheduleService {
     }
 
     public Page<SchedulePageResponse> findSchedulesPage(final int page, final int size) {
-        Page<Schedule> schedules = scheduleRepository.findAllByOrderByUpdatedAtDesc(PageRequest.of(page,size));
+        Page<Schedule> schedules = scheduleRepository.findAllByOrderByUpdatedAtDesc(PageRequest.of(page, size));
         return schedules.map(SchedulePageResponse::from);
     }
 
