@@ -2,11 +2,15 @@ package com.schedule.jpa.domain.schedule;
 
 import com.schedule.jpa.domain.BaseEntity;
 import com.schedule.jpa.domain.comment.Comment;
+import com.schedule.jpa.domain.user.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +35,12 @@ public class Schedule extends BaseEntity {
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "schedule_user",
+            joinColumns = @JoinColumn(name = "schedule_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<User> users = new ArrayList<>();
 
     public Schedule(final String username, final String title, final String content) {
         this.username = username;

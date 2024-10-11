@@ -19,16 +19,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/schedules")
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
 
-    @PostMapping("/schedule")
+    @PostMapping
     public ResponseEntity<ScheduleSaveResponse> createSchedule(@RequestBody final ScheduleSaveRequest request) {
         final ScheduleSaveResponse response = scheduleService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -40,13 +42,13 @@ public class ScheduleController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping("/schedules")
+    @GetMapping
     public ResponseEntity<List<ScheduleResponse>> readSchedules() {
         final List<ScheduleResponse> responses = scheduleService.findSchedules();
         return ResponseEntity.status(HttpStatus.OK).body(responses);
     }
 
-    @GetMapping("/schedules/page")
+    @GetMapping("/page")
     public ResponseEntity<List<SchedulePageResponse>> readSchedulesPage(
             @RequestParam(defaultValue = "0", value = "page") int page,
             @RequestParam(defaultValue = "10", value = "size") int size
