@@ -13,6 +13,6 @@ public record SchedulePageResponse(
 ) {
     public static SchedulePageResponse from(final Schedule schedule) {
         return new SchedulePageResponse(schedule.getTitle(), schedule.getContent(), schedule.getComments().size(),
-                schedule.getCreatedAt(), schedule.getUpdatedAt(), schedule.getUsername());
+                schedule.getCreatedAt(), schedule.getUpdatedAt(), schedule.getUser().getName());
     }
 }

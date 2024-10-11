@@ -12,7 +12,7 @@ public record ScheduleResponse(
         LocalDateTime updatedAt
 ) {
     public static ScheduleResponse from(final Schedule schedule) {
-        return new ScheduleResponse(schedule.getUsername(), schedule.getTitle(), schedule.getContent(),
+        return new ScheduleResponse(schedule.getUser().getName(), schedule.getTitle(), schedule.getContent(),
                 schedule.getCreatedAt(), schedule.getUpdatedAt());
     }
 

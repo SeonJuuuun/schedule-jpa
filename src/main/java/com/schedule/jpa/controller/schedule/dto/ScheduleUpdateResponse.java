@@ -11,7 +11,7 @@ public record ScheduleUpdateResponse(
         LocalDateTime updatedAt
 ) {
     public static ScheduleUpdateResponse from(final Schedule schedule) {
-        return new ScheduleUpdateResponse(schedule.getUsername(), schedule.getTitle(), schedule.getContent(),
+        return new ScheduleUpdateResponse(schedule.getUser().getName(), schedule.getTitle(), schedule.getContent(),
                 schedule.getCreatedAt(), schedule.getUpdatedAt());
     }
 }

@@ -1,7 +1,7 @@
 package com.schedule.jpa.controller.schedule.dto;
 
 public record ScheduleSaveRequest(
-        String username,
+        Long userId,
         String title,
         String content
 ) {

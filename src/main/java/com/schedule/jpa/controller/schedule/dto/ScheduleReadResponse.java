@@ -18,7 +18,7 @@ public record ScheduleReadResponse(
         final List<CommentReadResponse> comments = schedule.getComments().stream()
                 .map(CommentReadResponse::from)
                 .toList();
-        return new ScheduleReadResponse(schedule.getUsername(), schedule.getTitle(), schedule.getContent(),
+        return new ScheduleReadResponse(schedule.getUser().getName(), schedule.getTitle(), schedule.getContent(),
                 schedule.getCreatedAt(), schedule.getUpdatedAt(), comments);
     }
 }

@@ -1,6 +1,7 @@
 package com.schedule.jpa.service;
 
 import static com.schedule.jpa.controller.exception.ErrorCodes.SCHEDULE_NOT_FOUND;
+import static com.schedule.jpa.controller.exception.ErrorCodes.USER_NOT_FOUND;
 
 import com.schedule.jpa.controller.schedule.dto.SchedulePageResponse;
 import com.schedule.jpa.controller.schedule.dto.ScheduleReadResponse;
@@ -11,6 +12,8 @@ import com.schedule.jpa.controller.schedule.dto.ScheduleUpdateRequest;
 import com.schedule.jpa.controller.schedule.dto.ScheduleUpdateResponse;
 import com.schedule.jpa.domain.schedule.Schedule;
 import com.schedule.jpa.domain.schedule.ScheduleRepository;
+import com.schedule.jpa.domain.user.User;
+import com.schedule.jpa.domain.user.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,9 +26,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
+    private final UserRepository userRepository;
 
     public ScheduleSaveResponse create(final ScheduleSaveRequest request) {
-        final Schedule schedule = Schedule.of(request.username(), request.title(), request.content());
+        final User user = userRepository.findById(request.userId())
+                .orElseThrow(() -> new ScheduleApplicationException(USER_NOT_FOUND));
+        final Schedule schedule = Schedule.of(user, request.title(), request.content());
         final Schedule savedSchedule = scheduleRepository.save(schedule);
         return ScheduleSaveResponse.from(savedSchedule);
     }

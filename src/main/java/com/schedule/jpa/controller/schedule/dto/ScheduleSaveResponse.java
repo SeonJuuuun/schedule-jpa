@@ -11,7 +11,7 @@ public record ScheduleSaveResponse(
 ) {
     public static ScheduleSaveResponse from(final Schedule schedule) {
         return new ScheduleSaveResponse(
-                schedule.getUsername(),
+                schedule.getUser().getName(),
                 schedule.getTitle(),
                 schedule.getContent(),
                 schedule.getCreatedAt()
