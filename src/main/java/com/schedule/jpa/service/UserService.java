@@ -26,4 +26,8 @@ public class UserService {
                 .orElseThrow(() -> new ScheduleApplicationException(ErrorCodes.USER_NOT_FOUND));
         return UserReadResponse.from(user);
     }
+
+    public void delete(final Long userId) {
+        userRepository.deleteById(userId);
+    }
 }

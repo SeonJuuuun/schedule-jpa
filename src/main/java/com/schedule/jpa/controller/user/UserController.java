@@ -7,6 +7,7 @@ import com.schedule.jpa.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,5 +32,11 @@ public class UserController {
     public ResponseEntity<UserReadResponse> readUser(@PathVariable final Long userId) {
         final UserReadResponse response = userService.findUser(userId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable final Long userId) {
+        userService.delete(userId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
