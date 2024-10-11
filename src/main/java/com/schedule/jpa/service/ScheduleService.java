@@ -28,11 +28,13 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;
 
+    @Transactional
     public ScheduleSaveResponse create(final ScheduleSaveRequest request) {
         final User user = userRepository.findById(request.userId())
                 .orElseThrow(() -> new ScheduleApplicationException(USER_NOT_FOUND));
         final Schedule schedule = Schedule.of(user, request.title(), request.content());
         final Schedule savedSchedule = scheduleRepository.save(schedule);
+        user.addWriteSchedules(schedule);
         return ScheduleSaveResponse.from(savedSchedule);
     }
 

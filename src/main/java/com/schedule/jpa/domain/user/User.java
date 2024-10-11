@@ -3,6 +3,7 @@ package com.schedule.jpa.domain.user;
 import com.schedule.jpa.domain.BaseEntity;
 import com.schedule.jpa.domain.comment.Comment;
 import com.schedule.jpa.domain.schedule.Schedule;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -30,6 +31,9 @@ public class User extends BaseEntity {
 
     private String email;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Schedule> writeSchedules = new ArrayList<>();
+
     @OneToMany
     private List<Comment> comments = new ArrayList<>();
 
@@ -43,5 +47,9 @@ public class User extends BaseEntity {
 
     public static User of(final String name, final String email) {
         return new User(name, email);
+    }
+
+    public void addWriteSchedules(final Schedule schedule) {
+        writeSchedules.add(schedule);
     }
 }
