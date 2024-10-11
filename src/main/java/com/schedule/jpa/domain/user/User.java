@@ -31,6 +31,8 @@ public class User extends BaseEntity {
 
     private String email;
 
+    private String password;
+
     @OneToMany(cascade = CascadeType.ALL)
     private List<Schedule> writeSchedules = new ArrayList<>();
 
@@ -40,13 +42,14 @@ public class User extends BaseEntity {
     @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private List<Schedule> schedules = new ArrayList<>();
 
-    public User(final String name, final String email) {
+    public User(final String name, final String password, final String email) {
         this.name = name;
+        this.password = password;
         this.email = email;
     }
 
-    public static User of(final String name, final String email) {
-        return new User(name, email);
+    public static User of(final String name, final String password, final String email) {
+        return new User(name, password,email);
     }
 
     public void addWriteSchedules(final Schedule schedule) {

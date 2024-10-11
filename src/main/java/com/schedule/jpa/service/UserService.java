@@ -1,5 +1,6 @@
 package com.schedule.jpa.service;
 
+import com.schedule.jpa.config.PasswordEncoder;
 import com.schedule.jpa.controller.exception.ErrorCodes;
 import com.schedule.jpa.controller.user.dto.UserReadResponse;
 import com.schedule.jpa.controller.user.dto.UserSaveRequest;
@@ -14,9 +15,11 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public UserSaveResponse create(final UserSaveRequest request) {
-        final User user = User.of(request.name(), request.email());
+        final String password = passwordEncoder.encode(request.password());
+        final User user = User.of(request.name(), password, request.email());
         final User savedUser = userRepository.save(user);
         return UserSaveResponse.from(savedUser);
     }
