@@ -1,6 +1,7 @@
 package com.schedule.jpa.service;
 
 import static com.schedule.jpa.controller.exception.ErrorCodes.SCHEDULE_NOT_FOUND;
+import static com.schedule.jpa.controller.exception.ErrorCodes.USER_NOT_ADMIN;
 import static com.schedule.jpa.controller.exception.ErrorCodes.USER_NOT_FOUND;
 
 import com.schedule.jpa.controller.schedule.dto.SchedulePageResponse;
@@ -12,8 +13,10 @@ import com.schedule.jpa.controller.schedule.dto.ScheduleUpdateRequest;
 import com.schedule.jpa.controller.schedule.dto.ScheduleUpdateResponse;
 import com.schedule.jpa.domain.schedule.Schedule;
 import com.schedule.jpa.domain.schedule.ScheduleRepository;
+import com.schedule.jpa.domain.user.Role;
 import com.schedule.jpa.domain.user.User;
 import com.schedule.jpa.domain.user.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -55,14 +58,29 @@ public class ScheduleService {
     }
 
     @Transactional
-    public ScheduleUpdateResponse update(final ScheduleUpdateRequest request, final Long scheduleId) {
+    public ScheduleUpdateResponse update(
+            final ScheduleUpdateRequest request,
+            final Long scheduleId,
+            final HttpServletRequest httpServletRequest
+    ) {
+        final Role role = (Role) httpServletRequest.getAttribute("role");
         final Schedule schedule = scheduleRepository.findById(scheduleId)
                 .orElseThrow(() -> new ScheduleApplicationException(SCHEDULE_NOT_FOUND));
+        if (!role.equals(Role.ADMIN)) {
+            throw new ScheduleApplicationException(USER_NOT_ADMIN);
+        }
         schedule.update(request.title(), request.title());
         return ScheduleUpdateResponse.from(schedule);
     }
 
-    public void delete(final Long scheduleId) {
+    public void delete(
+            final Long scheduleId,
+            final HttpServletRequest httpServletRequest
+    ) {
+        final Role role = (Role) httpServletRequest.getAttribute("role");
+        if (!role.equals(Role.ADMIN)) {
+            throw new ScheduleApplicationException(USER_NOT_ADMIN);
+        }
         scheduleRepository.deleteById(scheduleId);
     }
 }

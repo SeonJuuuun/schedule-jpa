@@ -1,10 +1,10 @@
 package com.schedule.jpa.filter;
 
-import static com.schedule.jpa.controller.exception.ErrorCodes.*;
+import static com.schedule.jpa.controller.exception.ErrorCodes.TOKEN_EXPIRED;
 import static com.schedule.jpa.controller.exception.ErrorCodes.TOKEN_NULL_EXCEPTION;
 
-import com.schedule.jpa.controller.exception.ErrorCodes;
 import com.schedule.jpa.domain.jwt.JwtProvider;
+import com.schedule.jpa.domain.user.Role;
 import com.schedule.jpa.service.ScheduleApplicationException;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
@@ -28,6 +28,7 @@ public class JwtAuthenticationFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
+
         final String authorizationHeader = req.getHeader(HttpHeaders.AUTHORIZATION);
 
         final String requestUri = req.getRequestURI();
@@ -44,6 +45,10 @@ public class JwtAuthenticationFilter implements Filter {
         if (jwtProvider.isTokenExpired(authorizationHeader)) {
             throw new ScheduleApplicationException(TOKEN_EXPIRED);
         }
+
+        final Role role = jwtProvider.getUserRole(authorizationHeader);
+
+        req.setAttribute("role", role);
 
         chain.doFilter(request, response);
     }

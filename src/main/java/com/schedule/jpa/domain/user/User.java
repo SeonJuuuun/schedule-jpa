@@ -6,6 +6,8 @@ import com.schedule.jpa.domain.comment.Comment;
 import com.schedule.jpa.domain.schedule.Schedule;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -34,6 +36,9 @@ public class User extends BaseEntity {
 
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @OneToMany(cascade = CascadeType.ALL)
     private List<Schedule> writeSchedules = new ArrayList<>();
 
@@ -43,14 +48,15 @@ public class User extends BaseEntity {
     @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private List<Schedule> schedules = new ArrayList<>();
 
-    public User(final String name, final String password, final String email) {
+    public User(final String name, final String password, final Role role, final String email) {
         this.name = name;
         this.password = password;
+        this.role = role;
         this.email = email;
     }
 
-    public static User of(final String name, final String password, final String email) {
-        return new User(name, password,email);
+    public static User of(final String name, final String password, final Role role, final String email) {
+        return new User(name, password, role, email);
     }
 
     public void addWriteSchedules(final Schedule schedule) {

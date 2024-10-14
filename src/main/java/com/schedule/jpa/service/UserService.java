@@ -5,6 +5,7 @@ import com.schedule.jpa.controller.exception.ErrorCodes;
 import com.schedule.jpa.controller.user.dto.UserReadResponse;
 import com.schedule.jpa.controller.user.dto.UserSaveRequest;
 import com.schedule.jpa.controller.user.dto.UserSaveResponse;
+import com.schedule.jpa.domain.user.Role;
 import com.schedule.jpa.domain.user.User;
 import com.schedule.jpa.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,8 @@ public class UserService {
 
     public UserSaveResponse create(final UserSaveRequest request) {
         final String password = passwordEncoder.encode(request.password());
-        final User user = User.of(request.name(), password, request.email());
+        final Role role = Role.from(request.role());
+        final User user = User.of(request.name(), password, role, request.email());
         final User savedUser = userRepository.save(user);
         return UserSaveResponse.from(savedUser);
     }

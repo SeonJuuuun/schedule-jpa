@@ -8,6 +8,7 @@ import com.schedule.jpa.controller.schedule.dto.ScheduleSaveResponse;
 import com.schedule.jpa.controller.schedule.dto.ScheduleUpdateRequest;
 import com.schedule.jpa.controller.schedule.dto.ScheduleUpdateResponse;
 import com.schedule.jpa.service.ScheduleService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -61,15 +62,19 @@ public class ScheduleController {
     @PutMapping("/{scheduleId}")
     public ResponseEntity<ScheduleUpdateResponse> updateSchedule(
             @RequestBody @Valid final ScheduleUpdateRequest request,
-            @PathVariable final Long scheduleId
+            @PathVariable final Long scheduleId,
+            final HttpServletRequest httpServletRequest
     ) {
-        final ScheduleUpdateResponse response = scheduleService.update(request, scheduleId);
+        final ScheduleUpdateResponse response = scheduleService.update(request, scheduleId, httpServletRequest);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @DeleteMapping("/{scheduleId}")
-    public ResponseEntity<Void> deleteSchedule(@PathVariable final Long scheduleId) {
-        scheduleService.delete(scheduleId);
+    public ResponseEntity<Void> deleteSchedule(
+            @PathVariable final Long scheduleId,
+            final HttpServletRequest httpServletRequest
+    ) {
+        scheduleService.delete(scheduleId, httpServletRequest);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

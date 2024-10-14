@@ -28,7 +28,7 @@ public class AuthService {
             throw new ScheduleApplicationException(INVALID_PASSWORD);
         }
 
-        final String token = jwtProvider.createToken(user.getId());
+        final String token = jwtProvider.createToken(user.getId(), user.getRole());
         return new LoginResponse(token);
     }
 }

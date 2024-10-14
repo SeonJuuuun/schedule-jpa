@@ -1,7 +1,7 @@
 package com.schedule.jpa.domain.jwt;
 
+import com.schedule.jpa.domain.user.Role;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -20,9 +20,10 @@ public class JwtProvider {
         this.secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     }
 
-    public String createToken(final Long id) {
+    public String createToken(final Long id, final Role role) {
         final Date now = new Date();
         final Claims claims = Jwts.claims().setSubject(String.valueOf(id));
+        claims.put("role", role);
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
@@ -40,5 +41,10 @@ public class JwtProvider {
 
     public boolean isTokenExpired(String token) {
         return parseToken(token).getExpiration().before(new Date());
+    }
+
+    public Role getUserRole(String token) {
+        final Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+        return Role.valueOf(claims.get("role").toString());
     }
 }
