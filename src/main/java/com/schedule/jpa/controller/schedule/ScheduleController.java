@@ -1,5 +1,6 @@
 package com.schedule.jpa.controller.schedule;
 
+import com.schedule.jpa.common.resolver.AuthenticationUserId;
 import com.schedule.jpa.controller.schedule.dto.SchedulePageResponse;
 import com.schedule.jpa.controller.schedule.dto.ScheduleReadResponse;
 import com.schedule.jpa.controller.schedule.dto.ScheduleResponse;
@@ -7,9 +8,7 @@ import com.schedule.jpa.controller.schedule.dto.ScheduleSaveRequest;
 import com.schedule.jpa.controller.schedule.dto.ScheduleSaveResponse;
 import com.schedule.jpa.controller.schedule.dto.ScheduleUpdateRequest;
 import com.schedule.jpa.controller.schedule.dto.ScheduleUpdateResponse;
-import com.schedule.jpa.domain.user.Role;
 import com.schedule.jpa.service.ScheduleService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +33,11 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @PostMapping
-    public ResponseEntity<ScheduleSaveResponse> createSchedule(@RequestBody @Valid final ScheduleSaveRequest request) {
-        final ScheduleSaveResponse response = scheduleService.create(request);
+    public ResponseEntity<ScheduleSaveResponse> createSchedule(
+            @RequestBody @Valid final ScheduleSaveRequest request,
+            @AuthenticationUserId final Long userId
+    ) {
+        final ScheduleSaveResponse response = scheduleService.create(request, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -64,19 +66,18 @@ public class ScheduleController {
     public ResponseEntity<ScheduleUpdateResponse> updateSchedule(
             @RequestBody @Valid final ScheduleUpdateRequest request,
             @PathVariable final Long scheduleId,
-            final HttpServletRequest httpServletRequest
+            @AuthenticationUserId final Long userId
     ) {
-        final ScheduleUpdateResponse response = scheduleService.update(request, scheduleId,
-                (Role) httpServletRequest.getAttribute("role"));
+        final ScheduleUpdateResponse response = scheduleService.update(request, scheduleId, userId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @DeleteMapping("/{scheduleId}")
     public ResponseEntity<Void> deleteSchedule(
             @PathVariable final Long scheduleId,
-            final HttpServletRequest httpServletRequest
+            @AuthenticationUserId final Long userId
     ) {
-        scheduleService.delete(scheduleId, (Role) httpServletRequest.getAttribute("role"));
+        scheduleService.delete(scheduleId, userId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

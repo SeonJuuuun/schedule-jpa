@@ -11,6 +11,7 @@ public enum ErrorCodes {
 
     // 일정 관련
     SCHEDULE_NOT_FOUND("일정이 존재하지 않습니다.", 2001L, NOT_FOUND),
+    SCHEDULE_VERIFY_OWNER("본인의 일정이 아닙니다.", 2002L, FORBIDDEN),
 
     // 댓글 관련
     COMMENT_NOT_FOUND("댓글이 존재하지 않습니다.", 3001L, NOT_FOUND),

@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class JwtAuthenticationFilter implements Filter {
+public class AuthenticationFilter implements Filter {
 
     private final JwtProvider jwtProvider;
 

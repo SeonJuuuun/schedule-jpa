@@ -66,4 +66,8 @@ public class User extends BaseEntity {
     public boolean isValidPassword(final String password, final PasswordEncoder passwordEncoder) {
         return passwordEncoder.matches(password, this.password);
     }
+
+    public boolean isAdmin() {
+        return this.role.equals(Role.ADMIN);
+    }
 }

@@ -78,4 +78,8 @@ public class Schedule extends BaseEntity {
     public void deleteComment(Comment comment) {
         comments.remove(comment);
     }
+
+    public boolean verifyOwner(final User user) {
+        return this.user.equals(user);
+    }
 }
