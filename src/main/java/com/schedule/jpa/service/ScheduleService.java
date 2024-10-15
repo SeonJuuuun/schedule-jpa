@@ -12,11 +12,15 @@ import com.schedule.jpa.controller.schedule.dto.ScheduleSaveResponse;
 import com.schedule.jpa.controller.schedule.dto.ScheduleUpdateRequest;
 import com.schedule.jpa.controller.schedule.dto.ScheduleUpdateResponse;
 import com.schedule.jpa.domain.schedule.Schedule;
-import com.schedule.jpa.domain.schedule.ScheduleRepository;
+import com.schedule.jpa.infra.repository.ScheduleRepository;
 import com.schedule.jpa.domain.user.Role;
 import com.schedule.jpa.domain.user.User;
-import com.schedule.jpa.domain.user.UserRepository;
-import jakarta.servlet.http.HttpServletRequest;
+import com.schedule.jpa.infra.repository.UserRepository;
+import com.schedule.jpa.domain.weather.Weather;
+import com.schedule.jpa.infra.client.weather.WeatherClient;
+import com.schedule.jpa.infra.client.weather.dto.WeatherResponse;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,15 +34,19 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;
+    private final WeatherClient weatherClient;
 
     @Transactional
     public ScheduleSaveResponse create(final ScheduleSaveRequest request) {
         final User user = userRepository.findById(request.userId())
                 .orElseThrow(() -> new ScheduleApplicationException(USER_NOT_FOUND));
-        final Schedule schedule = Schedule.of(user, request.title(), request.content());
+        final WeatherResponse weatherResponse = weatherClient.getWeather(
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd")));
+        final Weather weather = Weather.of(weatherResponse.date(), weatherResponse.weather());
+        final Schedule schedule = Schedule.of(user, request.title(), weather,request.content());
         final Schedule savedSchedule = scheduleRepository.save(schedule);
         user.addWriteSchedules(schedule);
-        return ScheduleSaveResponse.from(savedSchedule);
+        return ScheduleSaveResponse.from(savedSchedule, weatherResponse);
     }
 
     public ScheduleReadResponse findSchedule(final Long scheduleId) {
@@ -61,9 +69,8 @@ public class ScheduleService {
     public ScheduleUpdateResponse update(
             final ScheduleUpdateRequest request,
             final Long scheduleId,
-            final HttpServletRequest httpServletRequest
+            final Role role
     ) {
-        final Role role = (Role) httpServletRequest.getAttribute("role");
         final Schedule schedule = scheduleRepository.findById(scheduleId)
                 .orElseThrow(() -> new ScheduleApplicationException(SCHEDULE_NOT_FOUND));
         if (!role.equals(Role.ADMIN)) {
@@ -73,11 +80,7 @@ public class ScheduleService {
         return ScheduleUpdateResponse.from(schedule);
     }
 
-    public void delete(
-            final Long scheduleId,
-            final HttpServletRequest httpServletRequest
-    ) {
-        final Role role = (Role) httpServletRequest.getAttribute("role");
+    public void delete(final Long scheduleId, final Role role) {
         if (!role.equals(Role.ADMIN)) {
             throw new ScheduleApplicationException(USER_NOT_ADMIN);
         }

@@ -7,6 +7,7 @@ import com.schedule.jpa.controller.schedule.dto.ScheduleSaveRequest;
 import com.schedule.jpa.controller.schedule.dto.ScheduleSaveResponse;
 import com.schedule.jpa.controller.schedule.dto.ScheduleUpdateRequest;
 import com.schedule.jpa.controller.schedule.dto.ScheduleUpdateResponse;
+import com.schedule.jpa.domain.user.Role;
 import com.schedule.jpa.service.ScheduleService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -65,7 +66,8 @@ public class ScheduleController {
             @PathVariable final Long scheduleId,
             final HttpServletRequest httpServletRequest
     ) {
-        final ScheduleUpdateResponse response = scheduleService.update(request, scheduleId, httpServletRequest);
+        final ScheduleUpdateResponse response = scheduleService.update(request, scheduleId,
+                (Role) httpServletRequest.getAttribute("role"));
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -74,7 +76,7 @@ public class ScheduleController {
             @PathVariable final Long scheduleId,
             final HttpServletRequest httpServletRequest
     ) {
-        scheduleService.delete(scheduleId, httpServletRequest);
+        scheduleService.delete(scheduleId, (Role) httpServletRequest.getAttribute("role"));
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

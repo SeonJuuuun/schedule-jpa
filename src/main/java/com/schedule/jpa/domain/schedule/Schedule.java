@@ -3,7 +3,9 @@ package com.schedule.jpa.domain.schedule;
 import com.schedule.jpa.domain.BaseEntity;
 import com.schedule.jpa.domain.comment.Comment;
 import com.schedule.jpa.domain.user.User;
+import com.schedule.jpa.domain.weather.Weather;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -40,20 +42,24 @@ public class Schedule extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
+    @Embedded
+    private Weather weather;
+
     @ManyToMany
     @JoinTable(name = "schedule_user",
             joinColumns = @JoinColumn(name = "schedule_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> users = new ArrayList<>();
 
-    public Schedule(final User user, final String title, final String content) {
+    public Schedule(final User user, final String title, final Weather weather, final String content) {
         this.user = user;
         this.title = title;
+        this.weather = weather;
         this.content = content;
     }
 
-    public static Schedule of(final User user, final String title, final String content) {
-        return new Schedule(user, title, content);
+    public static Schedule of(final User user, final String title, final Weather weather, final String content) {
+        return new Schedule(user, title, weather, content);
     }
 
     public void update(final String title, final String content) {
