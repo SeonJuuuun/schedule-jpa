@@ -32,18 +32,18 @@ public class JwtProvider {
                 .compact();
     }
 
-    public Claims parseToken(String token) {
+    public Claims parseToken(final String token) {
         return Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody();
     }
 
-    public boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(final String token) {
         return parseToken(token).getExpiration().before(new Date());
     }
 
-    public Role getUserRole(String token) {
+    public Role getUserRole(final String token) {
         final Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
         return Role.valueOf(claims.get("role").toString());
     }

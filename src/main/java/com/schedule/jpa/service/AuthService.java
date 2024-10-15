@@ -8,7 +8,7 @@ import com.schedule.jpa.controller.auth.dto.LoginRequest;
 import com.schedule.jpa.controller.auth.dto.LoginResponse;
 import com.schedule.jpa.domain.jwt.JwtProvider;
 import com.schedule.jpa.domain.user.User;
-import com.schedule.jpa.domain.user.UserRepository;
+import com.schedule.jpa.infra.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
