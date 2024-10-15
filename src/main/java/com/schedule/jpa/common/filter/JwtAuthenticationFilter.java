@@ -1,4 +1,4 @@
-package com.schedule.jpa.filter;
+package com.schedule.jpa.common.filter;
 
 import static com.schedule.jpa.controller.exception.ErrorCodes.TOKEN_EXPIRED;
 import static com.schedule.jpa.controller.exception.ErrorCodes.TOKEN_NULL_EXCEPTION;

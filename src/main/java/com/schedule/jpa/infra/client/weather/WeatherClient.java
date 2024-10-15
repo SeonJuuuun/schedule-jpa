@@ -3,8 +3,10 @@ package com.schedule.jpa.infra.client.weather;
 import com.schedule.jpa.infra.client.weather.dto.WeatherResponse;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
+@Component
 @RequiredArgsConstructor
 public class WeatherClient {
 

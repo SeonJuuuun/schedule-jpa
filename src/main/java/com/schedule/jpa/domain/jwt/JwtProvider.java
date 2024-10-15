@@ -2,6 +2,7 @@ package com.schedule.jpa.domain.jwt;
 
 import com.schedule.jpa.domain.user.Role;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -30,6 +31,24 @@ public class JwtProvider {
                 .setExpiration(new Date(now.getTime() + (30 * 60 * 1000L)))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
+    }
+
+    public Long getPayload(final String token) {
+        String sub = getClaims(token)
+                .getBody()
+                .get("sub", String.class);
+        return Long.parseLong(sub);
+    }
+
+    public Jws<Claims> getClaims(final String token) {
+        try {
+            return Jwts.parserBuilder()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(token);
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 
     public Claims parseToken(final String token) {
