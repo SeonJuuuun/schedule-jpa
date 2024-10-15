@@ -83,7 +83,7 @@ public class ScheduleService {
         if (!user.isAdmin()) {
             throw new ScheduleApplicationException(USER_NOT_ADMIN);
         }
-        schedule.update(request.title(), request.title());
+        schedule.update(request.title(), request.content());
         return ScheduleUpdateResponse.from(schedule);
     }
 
