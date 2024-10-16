@@ -45,7 +45,7 @@ public class ScheduleServiceTest {
 
     @Test
     @DisplayName("일정 생성 성공")
-    public void create_Success() {
+    void create_Success() {
         // given
         final User user = User.of("테스트 유저", "test", Role.GENERAL, "test@gmail.com");
         final WeatherResponse weatherResponse = new WeatherResponse("10-15", "Sunny And Humid");
@@ -67,7 +67,7 @@ public class ScheduleServiceTest {
 
     @Test
     @DisplayName("일정 단건 조회 - 일정이 존재하지 않을때")
-    public void findSchedule_ScheduleNotFound() {
+    void findSchedule_ScheduleNotFound() {
         // given
         when(scheduleRepository.findById(1L)).thenReturn(Optional.empty());
 
@@ -77,7 +77,7 @@ public class ScheduleServiceTest {
 
     @Test
     @DisplayName("일정 단건 조회 - 일정이 존재할때")
-    public void findSchedule_ScheduleFound() {
+    void findSchedule_ScheduleFound() {
         // given
         final User user = User.of("테스트 유저", "test", Role.GENERAL, "test@gmail.com");
         final WeatherResponse weatherResponse = new WeatherResponse("10-15", "Sunny And Humid");
@@ -97,7 +97,7 @@ public class ScheduleServiceTest {
 
     @Test
     @DisplayName("일정 전체 조회 성공")
-    public void findSchedules_Success() {
+    void findSchedules_Success() {
         // given
         final User user1 = User.of("테스트 유저 1", "test1", Role.GENERAL, "test1@gmail.com");
         final WeatherResponse weatherResponse1 = new WeatherResponse("10-15", "Sunny And Humid");
@@ -128,7 +128,7 @@ public class ScheduleServiceTest {
 
     @Test
     @DisplayName("일정 수정 - 성공")
-    public void update_Success() {
+    void update_Success() {
         // given
         final User user = User.of("테스트 유저", "test", Role.ADMIN, "test@gmail.com");
         final Schedule schedule = Schedule.of(user, "기존 일정 제목", "Sunny", "기존 내용");
@@ -147,7 +147,7 @@ public class ScheduleServiceTest {
 
     @Test
     @DisplayName("존재하지 않는 일정 업데이트 시도")
-    public void update_NonExistSchedule() {
+    void update_NonExistSchedule() {
         // given
         final User user = User.of("테스트 유저", "test", Role.ADMIN, "test@gmail.com");
         final ScheduleUpdateRequest request = new ScheduleUpdateRequest("업데이트된 제목", "업데이트된 내용");
@@ -161,7 +161,7 @@ public class ScheduleServiceTest {
 
     @Test
     @DisplayName("존재하지 않는 유저 업데이트 시도")
-    public void update_NonExistUser() {
+    void update_NonExistUser() {
         // given
         final User user = User.of("테스트 유저", "test", Role.ADMIN, "test@gmail.com");
         final Schedule schedule = Schedule.of(user, "기존 일정 제목", "Sunny", "기존 내용");
@@ -177,7 +177,7 @@ public class ScheduleServiceTest {
 
     @Test
     @DisplayName("일정 삭제 - 성공")
-    public void delete_Success() {
+    void delete_Success() {
         // given
         final User user = User.of("테스트 유저", "test", Role.ADMIN, "test@gmail.com");
         final Schedule schedule = Schedule.of(user, "기존 제목", "Sunny", "기존 내용");
@@ -194,7 +194,7 @@ public class ScheduleServiceTest {
 
     @Test
     @DisplayName("존재하지 않는 일정 삭제")
-    public void delete_NonExistSchedule() {
+    void delete_NonExistSchedule() {
         // given
         when(scheduleRepository.findById(1L)).thenReturn(Optional.empty());
 
@@ -205,7 +205,7 @@ public class ScheduleServiceTest {
 
     @Test
     @DisplayName("존재하지 않는 사용자로 삭제 시도")
-    public void delete_NonExistUser() {
+    void delete_NonExistUser() {
         // given
         final Schedule schedule = Schedule.of(User.of("기존 유저", "existing", Role.ADMIN, "existing@gmail.com"), "기존 제목",
                 "Sunny", "기존 내용");
@@ -220,7 +220,7 @@ public class ScheduleServiceTest {
 
     @Test
     @DisplayName("일정 소유자가 아닌 사용자가 삭제 시도")
-    public void delete_NotOwner() {
+    void delete_NotOwner() {
         // given
         final User owner = User.of("소유자", "owner", Role.ADMIN, "owner@gmail.com");
         final User nonOwner = User.of("비소유자", "nonOwner", Role.ADMIN, "nonOwner@gmail.com");
@@ -236,7 +236,7 @@ public class ScheduleServiceTest {
 
     @Test
     @DisplayName("비관리자가 삭제 시도")
-    public void delete_UserNotAdmin() {
+    void delete_UserNotAdmin() {
         // given
         final User user = User.of("비관리자", "test", Role.GENERAL, "test@gmail.com");
         final Schedule schedule = Schedule.of(user, "기존 제목", "Sunny", "기존 내용");
