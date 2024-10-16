@@ -1,7 +1,11 @@
 package com.schedule.jpa.infra.client.weather;
 
+import static com.schedule.jpa.controller.exception.ErrorCodes.WEATHER_NOT_FOUND;
+
 import com.schedule.jpa.infra.client.weather.dto.WeatherResponse;
-import java.util.Arrays;
+import com.schedule.jpa.service.ScheduleApplicationException;
+import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -13,15 +17,16 @@ public class WeatherClient {
     private final WebClient webClient;
 
     public WeatherResponse getWeather(final String date) {
-        final WeatherResponse[] responses = webClient.get()
+        final List<WeatherResponse> responses = webClient.get()
                 .uri("/f-api/weather.json")
                 .retrieve()
-                .bodyToMono(WeatherResponse[].class)
+                .bodyToFlux(WeatherResponse.class)
+                .collectList()
                 .block();
 
-        return Arrays.stream(responses)
+        return Objects.requireNonNull(responses).stream()
                 .filter(response -> response.date().equals(date))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("날씨 정보를 찾을 수 없습니다."));
+                .orElseThrow(() -> new ScheduleApplicationException(WEATHER_NOT_FOUND));
     }
 }

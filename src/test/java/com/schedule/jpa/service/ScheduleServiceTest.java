@@ -15,7 +15,6 @@ import com.schedule.jpa.controller.schedule.dto.ScheduleUpdateResponse;
 import com.schedule.jpa.domain.schedule.Schedule;
 import com.schedule.jpa.domain.user.Role;
 import com.schedule.jpa.domain.user.User;
-import com.schedule.jpa.domain.weather.Weather;
 import com.schedule.jpa.infra.client.weather.WeatherClient;
 import com.schedule.jpa.infra.client.weather.dto.WeatherResponse;
 import com.schedule.jpa.infra.repository.ScheduleRepository;
@@ -50,9 +49,8 @@ public class ScheduleServiceTest {
         // given
         final User user = User.of("테스트 유저", "test", Role.GENERAL, "test@gmail.com");
         final WeatherResponse weatherResponse = new WeatherResponse("10-15", "Sunny And Humid");
-        final Weather weather = Weather.of(weatherResponse.date(), weatherResponse.weather());
         final ScheduleSaveRequest request = new ScheduleSaveRequest("test title", "test content");
-        final Schedule schedule = Schedule.of(user, request.title(), weather, request.content());
+        final Schedule schedule = Schedule.of(user, request.title(), weatherResponse.weather(), request.content());
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(weatherClient.getWeather(any())).thenReturn(weatherResponse);
@@ -83,9 +81,8 @@ public class ScheduleServiceTest {
         // given
         final User user = User.of("테스트 유저", "test", Role.GENERAL, "test@gmail.com");
         final WeatherResponse weatherResponse = new WeatherResponse("10-15", "Sunny And Humid");
-        final Weather weather = Weather.of(weatherResponse.date(), weatherResponse.weather());
         final ScheduleSaveRequest request = new ScheduleSaveRequest("test title", "test content");
-        final Schedule schedule = Schedule.of(user, request.title(), weather, request.content());
+        final Schedule schedule = Schedule.of(user, request.title(), weatherResponse.weather(), request.content());
 
         when(scheduleRepository.findById(1L)).thenReturn(Optional.of(schedule));
 
@@ -104,13 +101,11 @@ public class ScheduleServiceTest {
         // given
         final User user1 = User.of("테스트 유저 1", "test1", Role.GENERAL, "test1@gmail.com");
         final WeatherResponse weatherResponse1 = new WeatherResponse("10-15", "Sunny And Humid");
-        final Weather weather1 = Weather.of(weatherResponse1.date(), weatherResponse1.weather());
-        final Schedule schedule1 = Schedule.of(user1, "첫 번째 일정", weather1, "첫 번째 일정 내용");
+        final Schedule schedule1 = Schedule.of(user1, "첫 번째 일정", weatherResponse1.weather(), "첫 번째 일정 내용");
 
         final User user2 = User.of("테스트 유저 2", "test2", Role.GENERAL, "test2@gmail.com");
         final WeatherResponse weatherResponse2 = new WeatherResponse("10-15", "Cloudy");
-        final Weather weather2 = Weather.of(weatherResponse2.date(), weatherResponse2.weather());
-        final Schedule schedule2 = Schedule.of(user2, "두 번째 일정", weather2, "두 번째 일정 내용");
+        final Schedule schedule2 = Schedule.of(user2, "두 번째 일정", weatherResponse2.weather(), "두 번째 일정 내용");
 
         List<Schedule> schedules = List.of(schedule1, schedule2);
 
@@ -136,7 +131,7 @@ public class ScheduleServiceTest {
     public void update_Success() {
         // given
         final User user = User.of("테스트 유저", "test", Role.ADMIN, "test@gmail.com");
-        final Schedule schedule = Schedule.of(user, "기존 일정 제목", Weather.of("10-15", "Sunny"), "기존 내용");
+        final Schedule schedule = Schedule.of(user, "기존 일정 제목", "Sunny", "기존 내용");
         final ScheduleUpdateRequest request = new ScheduleUpdateRequest("업데이트된 제목", "업데이트된 내용");
 
         when(scheduleRepository.findById(1L)).thenReturn(Optional.of(schedule));
@@ -169,7 +164,7 @@ public class ScheduleServiceTest {
     public void update_NonExistUser() {
         // given
         final User user = User.of("테스트 유저", "test", Role.ADMIN, "test@gmail.com");
-        final Schedule schedule = Schedule.of(user, "기존 일정 제목", Weather.of("10-15", "Sunny"), "기존 내용");
+        final Schedule schedule = Schedule.of(user, "기존 일정 제목", "Sunny", "기존 내용");
         final ScheduleUpdateRequest request = new ScheduleUpdateRequest("업데이트된 제목", "업데이트된 내용");
 
         when(scheduleRepository.findById(1L)).thenReturn(Optional.of(schedule));
@@ -185,7 +180,7 @@ public class ScheduleServiceTest {
     public void delete_Success() {
         // given
         final User user = User.of("테스트 유저", "test", Role.ADMIN, "test@gmail.com");
-        final Schedule schedule = Schedule.of(user, "기존 제목", Weather.of("10-15", "Sunny"), "기존 내용");
+        final Schedule schedule = Schedule.of(user, "기존 제목", "Sunny", "기존 내용");
 
         when(scheduleRepository.findById(1L)).thenReturn(Optional.of(schedule));
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
@@ -213,7 +208,7 @@ public class ScheduleServiceTest {
     public void delete_NonExistUser() {
         // given
         final Schedule schedule = Schedule.of(User.of("기존 유저", "existing", Role.ADMIN, "existing@gmail.com"), "기존 제목",
-                Weather.of("10-15", "Sunny"), "기존 내용");
+                "Sunny", "기존 내용");
 
         when(scheduleRepository.findById(1L)).thenReturn(Optional.of(schedule));
         when(userRepository.findById(1L)).thenReturn(Optional.empty());
@@ -229,7 +224,7 @@ public class ScheduleServiceTest {
         // given
         final User owner = User.of("소유자", "owner", Role.ADMIN, "owner@gmail.com");
         final User nonOwner = User.of("비소유자", "nonOwner", Role.ADMIN, "nonOwner@gmail.com");
-        final Schedule schedule = Schedule.of(owner, "기존 제목", Weather.of("10-15", "Sunny"), "기존 내용");
+        final Schedule schedule = Schedule.of(owner, "기존 제목", "Sunny", "기존 내용");
 
         when(scheduleRepository.findById(1L)).thenReturn(Optional.of(schedule));
         when(userRepository.findById(1L)).thenReturn(Optional.of(nonOwner));
@@ -244,7 +239,7 @@ public class ScheduleServiceTest {
     public void delete_UserNotAdmin() {
         // given
         final User user = User.of("비관리자", "test", Role.GENERAL, "test@gmail.com");
-        final Schedule schedule = Schedule.of(user, "기존 제목", Weather.of("10-15", "Sunny"), "기존 내용");
+        final Schedule schedule = Schedule.of(user, "기존 제목", "Sunny", "기존 내용");
 
         when(scheduleRepository.findById(1L)).thenReturn(Optional.of(schedule));
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));

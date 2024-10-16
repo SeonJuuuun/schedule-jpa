@@ -1,6 +1,5 @@
 package com.schedule.jpa.controller.exception;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
@@ -29,6 +28,9 @@ public enum ErrorCodes {
 
     // 역할 관련
     ROLE_NOT_FOUND("잘못된 사용자 입니다.", 6001L, HttpStatus.BAD_REQUEST),
+
+    // 날씨 관련
+    WEATHER_NOT_FOUND("날씨 정보가 없습니다.", 7001L, NOT_FOUND),
 
     BAD_REQUEST("BAD_REQUEST", 9404L, HttpStatus.BAD_REQUEST),
     BAD_REQUEST_JSON_PARSE_ERROR("[BAD_REQUEST] JSON_PARSE_ERROR - 올바른 JSON 형식이 아님", 9405L, HttpStatus.BAD_REQUEST),
