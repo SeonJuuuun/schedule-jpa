@@ -59,6 +59,11 @@ public class User extends BaseEntity {
         return new User(name, password, role, email);
     }
 
+    public void update(final String name, final String email) {
+        this.name = name;
+        this.email = email;
+    }
+
     public void addWriteSchedules(final Schedule schedule) {
         writeSchedules.add(schedule);
     }

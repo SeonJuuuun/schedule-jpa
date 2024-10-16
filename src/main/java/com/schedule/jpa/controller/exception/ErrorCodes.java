@@ -21,6 +21,7 @@ public enum ErrorCodes {
     INVALID_EMAIL("이메일이 존재하지 않습니다.", 4002L, UNAUTHORIZED),
     INVALID_PASSWORD("패스워드가 올바르지 않습니다.", 4003L, UNAUTHORIZED),
     USER_NOT_ADMIN("유저의 역할이 관리자가 아닙니다.", 4004L, FORBIDDEN),
+    USER_VERIFY_OWNER("유저 본인이 아닙니다.", 4005L, FORBIDDEN),
 
     // 토큰 관련
     TOKEN_EXPIRED("토큰의 유효기간이 만료되었습니다.", 5001L, UNAUTHORIZED),
